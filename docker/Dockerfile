@@ -67,7 +67,13 @@ RUN apt-get update && \
 #install required architecture for running TRON
 	dpkg --add-architecture i386 && \
 	apt-get update && \
-	apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386
+	apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 && \
+	echo '************************************************************************************' && \
+	echo 'Download UPPAAL TRON manually from http://people.cs.aau.dk/~marius/tron/download.html' && \
+	echo 'You will need to accept the license!'&& \
+	echo 'unzip uppaal-tron-1.5-linux.zip in dtronpack directory:'&& \
+	echo 'cd /catkin_ws/dtronpack && unzip uppaal-tron-1.5-linux.zip' && \
+	echo '************************************************************************************'
 CMD bash
 
 #download UPPAAL TRON manually from http://people.cs.aau.dk/~marius/tron/download.html

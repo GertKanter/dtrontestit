@@ -29,9 +29,9 @@ public:
 	SpreadMessage ReadMessage();
 	int SendMessage(const char* channel, std::string data);
 	mailbox* Mailbox();
-    bool isConnActive();
+	bool isConnActive();
 private:
-    boost::function<void (int, char*, char*, char*)> callback;
+	boost::function<void (int, char*, char*, char*)> callback;
 	bool connectionActive;
 	mailbox* Mbox;
 	char* User;
@@ -55,7 +55,7 @@ SpreadAdapter::SpreadAdapter(const char* SpreadName, const char* UserName, boost
 }
 
 bool SpreadAdapter::isConnActive() {
-    return connectionActive;
+	return connectionActive;
 }
 
 mailbox* SpreadAdapter::Mailbox() {
@@ -115,7 +115,7 @@ SpreadMessage SpreadAdapter::ReadMessage() {
 	membership_info memb_info;
 	int16 mess_type;
 	
-    service_type = 0;
+	service_type = 0;
 	ret = SP_receive( *Mbox, &service_type, sender, 100, &num_groups, target_groups, &mess_type, &endian_mismatch, sizeof(message), message );
 	if(ret < 0) {
 		SP_error(ret);
@@ -124,7 +124,7 @@ SpreadMessage SpreadAdapter::ReadMessage() {
 	if(Is_regular_mess(service_type)){
 		/* A regular message, sent by one of the processes */
 		message[ret] = 0;
-	}else if( Is_membership_mess(service_type)){
+	} else if( Is_membership_mess(service_type)){
 		/* A membership notification */
 		ret = SP_get_memb_info(message, service_type, &memb_info);
 		if (ret < 0) {
@@ -154,33 +154,33 @@ namespace dtron_test_adapter {
 					const char* spread_username, 
 					std::vector<const char*> groups,
 					boost::function<void (std::string, std::map<std::string, int>)> receiveMessage);
-		  void sendMessage(const char* group, std::map<std::string, int> args);
-		  void spreadMessageCallback(int type, char* sender, char* group, char* msg);
-		};
+		void sendMessage(const char* group, std::map<std::string, int> args);
+		void spreadMessageCallback(int type, char* sender, char* group, char* msg);
+	};
 }
 
 
 namespace dtron_test_adapter {
-      TestAdapter::TestAdapter(
+		TestAdapter::TestAdapter(
 		ros::NodeHandle nh,
 		const char* spread_host,
 		const char* spread_username,
 		std::vector<const char*> groups,
 		boost::function<void (std::string, std::map<std::string, int>)> receiveMessage) :
 		nh_(nh),
-        spreadAdapter_(spread_host, spread_username, boost::bind(&TestAdapter::spreadMessageCallback, this, _1, _2, _3, _4)),
+		spreadAdapter_(spread_host, spread_username, boost::bind(&TestAdapter::spreadMessageCallback, this, _1, _2, _3, _4)),
 		receiveMessage_(receiveMessage) {
-         GOOGLE_PROTOBUF_VERIFY_VERSION;
-         if(spreadAdapter_.isConnActive()) {
-            ROS_INFO("Successfully connected to Spread server!");
-            for (unsigned int i = 0; i < groups.size(); ++i) {
-				spreadAdapter_.JoinGroup(groups[i]);
+			GOOGLE_PROTOBUF_VERIFY_VERSION;
+			if(spreadAdapter_.isConnActive()) {
+				ROS_INFO("Successfully connected to Spread server!");
+				for (unsigned int i = 0; i < groups.size(); ++i) {
+					spreadAdapter_.JoinGroup(groups[i]);
+				}
+				boost::thread spreadMessageReader(&SpreadAdapter::ReaderThread, &spreadAdapter_);
+			} else {
+				ROS_ERROR("Error: Spread server is not running!\n");
 			}
-            boost::thread spreadMessageReader(&SpreadAdapter::ReaderThread, &spreadAdapter_);
-         } else {
-            ROS_ERROR("Error: Spread server is not running!\n");
-		 }
-      }
+		}
 
 	void TestAdapter::sendMessage(const char* group, std::map<std::string, int> args) {
 		Sync response;
@@ -208,28 +208,28 @@ namespace dtron_test_adapter {
 }
 
 class Adapter {
-   private:
-      dtron_test_adapter::TestAdapter* testAdapter_;
-      actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> ac_movebase_;
-      actionlib::SimpleActionClient<topological_navigation::GotoNodeAction> ac_topological_;
-      std::map<std::string, std::string> node_map_;
-      ros::NodeHandle nh_;
-      std::string sync_input_;
-      std::string sync_output_;
-      std::string navigation_mode_;
-   public:
-      Adapter(ros::NodeHandle nh,
-              std::string goal_topic,
-              std::string sync_input,
-              std::string sync_output,
-              std::string navigation_mode,
-              std::string waypoint_goal_topic) :
-        ac_movebase_(goal_topic, true),
-        ac_topological_(waypoint_goal_topic, true),
-        nh_(nh),
-        sync_input_(sync_input),
-        sync_output_(sync_output),
-        navigation_mode_(navigation_mode) {
+	private:
+		dtron_test_adapter::TestAdapter* testAdapter_;
+		actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> ac_movebase_;
+		actionlib::SimpleActionClient<topological_navigation::GotoNodeAction> ac_topological_;
+		std::map<std::string, std::string> node_map_;
+		ros::NodeHandle nh_;
+		std::string sync_input_;
+		std::string sync_output_;
+		std::string navigation_mode_;
+	public:
+		Adapter(ros::NodeHandle nh,
+				std::string goal_topic,
+				std::string sync_input,
+				std::string sync_output,
+				std::string navigation_mode,
+				std::string waypoint_goal_topic) :
+		ac_movebase_(goal_topic, true),
+		ac_topological_(waypoint_goal_topic, true),
+		nh_(nh),
+		sync_input_(sync_input),
+		sync_output_(sync_output),
+		navigation_mode_(navigation_mode) {
 			nh.getParam("test_adapter/node_map", node_map_);
 			ROS_WARN("Loaded node map with %lu nodes!", node_map_.size());
 			if (navigation_mode_ != "waypoint") {
@@ -252,26 +252,26 @@ class Adapter {
 		testAdapter_ = &testAdapter;
 	}
 
-     void receiveMessage(std::string name, std::map<std::string, int> args) {
-        ROS_INFO("Received a message - %s!", name.c_str());
-        std::string state = boost::lexical_cast<std::string>(args["state"]);
-        std::string node_name = node_map_[state];
+	void receiveMessage(std::string name, std::map<std::string, int> args) {
+		ROS_INFO("Received a message - %s!", name.c_str());
+		std::string state = boost::lexical_cast<std::string>(args["state"]);
+		std::string node_name = node_map_[state];
 
-        if (navigation_mode_ != "waypoint") {
-           move_base_msgs::MoveBaseGoal goal;
-           double x, y;
-           nh_.getParam("test_adapter/nodes/" + node_name + "/x", x);
-           nh_.getParam("test_adapter/nodes/" + node_name + "/y", y);
-		   //std::cout <<node_name << " X: " << x << "Y: " << y << "\n";
-           goal.target_pose.header.frame_id = "/map";
-           goal.target_pose.pose.position.x = x;
-           goal.target_pose.pose.position.y = y;
-           goal.target_pose.pose.position.z = 0;
-           goal.target_pose.pose.orientation.x = 0;
-           goal.target_pose.pose.orientation.y = 0;
-           goal.target_pose.pose.orientation.z = 0;
-		   goal.target_pose.pose.orientation.w = 1;
-           ROS_INFO("Node: %s goal x: %.3f  y: %.3f", node_name, x, y);
+		if (navigation_mode_ != "waypoint") {
+			move_base_msgs::MoveBaseGoal goal;
+			double x, y;
+			nh_.getParam("test_adapter/nodes/" + node_name + "/x", x);
+			nh_.getParam("test_adapter/nodes/" + node_name + "/y", y);
+			//std::cout <<node_name << " X: " << x << "Y: " << y << "\n";
+			goal.target_pose.header.frame_id = "/map";
+			goal.target_pose.pose.position.x = x;
+			goal.target_pose.pose.position.y = y;
+			goal.target_pose.pose.position.z = 0;
+			goal.target_pose.pose.orientation.x = 0;
+			goal.target_pose.pose.orientation.y = 0;
+			goal.target_pose.pose.orientation.z = 0;
+			goal.target_pose.pose.orientation.w = 1;
+			ROS_INFO("Goal. Node %s, x: %.3f  y: %.3f", node_name.c_str(), x, y);
 			if (ac_movebase_.isServerConnected()) {
 				ac_movebase_.sendGoal(goal);
 				ac_movebase_.waitForResult();
@@ -284,11 +284,12 @@ class Adapter {
 				}
 			} else {
 				ROS_ERROR("Action server not connected!");
-           }
-        } else {
+ 			}
+		} else {
 			topological_navigation::GotoNodeGoal goal;
 			goal.target = node_name;
-			std::cout << node_name << "\n";
+			ROS_INFO("Goal. Node: %s", node_name.c_str());
+			//std::cout << node_name << "\n";
 			if (ac_topological_.isServerConnected()) {
 				ac_topological_.sendGoal(goal);
 				ac_topological_.waitForResult();
@@ -302,8 +303,8 @@ class Adapter {
 			} else {
               ROS_ERROR("Action server not connected!");
 			}
-        }
-    }
+		}
+	}
 };
 int main(int argc, char** argv) {
 		ros::init(argc, argv, "dtron_test_adapter");
@@ -331,7 +332,6 @@ int main(int argc, char** argv) {
 		Adapter adapter(nh, goal_topic, sync_input, sync_output, navigation_mode, waypoint_goal_topic);
 		dtron_test_adapter::TestAdapter testAdapter(nh,  (port + "@" + ip).c_str(), username.c_str(), groups, boost::bind(&Adapter::receiveMessage, &adapter, _1, _2));
 		adapter.setTestAdapter(testAdapter);
-
 		ROS_INFO("Test adapter is running!");
 		ros::Rate r(20);
 		while (nh.ok()) {

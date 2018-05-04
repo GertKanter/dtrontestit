@@ -10,9 +10,9 @@ tests:
     bagDuration: "" # empty = use default
   - tag: "Scenario #2" # identifier for reporting
     pipeline: "" # empty for any
-    source: "/testit_tests/03" # test scenario source directory (SMACH state machine, UPPAAL model etc) inside TestIt docker container
+    source: "/testit_tests/02" # test scenario source directory (SMACH state machine, UPPAAL model etc) inside TestIt docker container
     launch: "" # how to execute this test (run command) in TestIt container, if empty, then assumed that test is not explicitly executed (already started at runSUT and oracle is used to determine pass/fail)
-    oracle: "./testit_tests/03/oracle/oracle.py WayPoint8" # determining whether pass/fail, if empty = "launch" execution result will be used to determine pass/fail
+    oracle: "./testit_tests/02/oracle/oracle.py WayPoint8" # determining whether pass/fail, if empty = "launch" execution result will be used to determine pass/fail
     timeout: 300 # time in seconds for timeout (0 for no timeout)
     timeoutVerdict: False # if timeout occurs, declare the test as this (False = fail, True = success)
     bagMaxSplits: "" # empty = use default
@@ -31,7 +31,7 @@ configuration:
   bringupSUTDelay: 0 # duration to wait after command
   bringupSUTTimeout: 1 # seconds (0 for no timeout, but you have to specify bringup_finish_trigger then or tests will not be run)
   bringupSUTFinishTrigger: "-" # command to test whether startup is finished, "-" = no trigger
-  runSUT: "docker run --rm --net=rosnetwork --env ROS_HOSTNAME=[[masterHost]] --env ROS_MASTER_URI=http://[[masterHost]]:11311 --name [[masterHost]] -dt maintestit_tb_sut:latest /bin/bash -c \"source /catkin_ws/devel/setup.bash && rosrun mission_control start_move_base_in_docker.sh && tail -f /dev/null\"" # run SUT 
+  runSUT: "docker run --rm --net=rosnetwork --env ROS_HOSTNAME=[[masterHost]] --env ROS_MASTER_URI=http://[[masterHost]]:11311 --name [[masterHost]] -dt testit_tb_sut:latest /bin/bash -c \"source /catkin_ws/devel/setup.bash && rosrun mission_control start_move_base_in_docker.sh && tail -f /dev/null\"" # run SUT 
   runSUTDelay: 90 # duration to wait for SUT to come up (roscore initialization)
   runSUTTimeout: 90
   runSUTFinishTrigger: "-"
@@ -47,7 +47,7 @@ configuration:
   bringupTestItDelay: 0 # duration to wait after command
   bringupTestItTimeout: 1
   bringupTestItFinishTrigger: "-"
-  runTestIt: "docker run --rm --volume=testit_tests:/testit_tests --net=rosnetwork --env ROS_VERSION=[[rosVersion]] --env ROS_HOSTNAME=[[testitHost]] --env ROS_MASTER_URI=http://[[masterHost]]:11311 --name [[testitHost]] -dt maintestit_tb_testit /bin/bash -c \"cd /catkin_ws/src/testit/dtron/turtlebot && ./run_top_nav.sh && tail -f /dev/null\"" # how to bring up a pipeline TestIt (general case), you can use "[[]]" for replacing 
+  runTestIt: "docker run --rm --volume=/catkin_ws/src/testit/dtron/turtlebot/testit_tests/:/testit_tests --net=rosnetwork --env ROS_VERSION=[[rosVersion]] --env ROS_HOSTNAME=[[testitHost]] --env ROS_MASTER_URI=http://[[masterHost]]:11311 --name [[testitHost]] -dt testit_tb_testit /bin/bash -c \"/catkin_ws/src/testit/dtron/turtlebot/scripts/run_top_nav.sh && tail -f /dev/null\"" # how to bring up a pipeline TestIt (general case), you can use "[[]]" for replacing 
   runTestItDelay: 25 # duration to wait after command
   runTestItTimeout: 25
   runTestItFinishTrigger: "-"
