@@ -34,7 +34,7 @@ RUN apt-get update && \
 #clone example for TestIt and STRANDS packages
 	git clone https://github.com/arturgummel/dtrontestit.git /catkin_ws/src/testit/dtron && \
 	git clone https://github.com/arturgummel/dtronpack.git /catkin_ws/dtronpack && \
-	/bin/bash -c "/catkin_ws/src/testit/dtron/build_stuff.sh" && \
+	/bin/bash -c "/catkin_ws/src/testit/dtron/scripts/build_stuff.sh" && \
 	cd /catkin_ws/src && \
 	git clone https://github.com/strands-project/strands_navigation.git && \
 	git clone https://github.com/strands-project/mongodb_store.git && \
