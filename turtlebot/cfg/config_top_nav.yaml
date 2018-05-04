@@ -22,7 +22,7 @@ tests:
     source: "/testit_tests/03" # test scenario source directory (SMACH state machine, UPPAAL model etc) inside TestIt docker container
     launch: "" # how to execute this test (run command) in TestIt container, if empty, then assumed that test is not explicitly executed (already started at runSUT and oracle is used to determine pass/fail)
     oracle: "./testit_tests/03/oracle/oracle.py WayPoint25" # determining whether pass/fail, if empty = "launch" execution result will be used to determine pass/fail
-    timeout: 300 # time in seconds for timeout (0 for no timeout)
+    timeout: 1800 # time in seconds for timeout (0 for no timeout)
     timeoutVerdict: False # if timeout occurs, declare the test as this (False = fail, True = success)
     bagMaxSplits: "" # empty = use default
     bagDuration: "" # empty = use default
