@@ -45,6 +45,8 @@ def resultCallback(data):
 	rospy.loginfo(goalStatus)
 	if goalStatus != "Goal reached.":
 		return False
+	else:
+		return True
 
 def goalCallback(data):
 	x = float(data.pose.position.x)
@@ -55,15 +57,23 @@ def goalCallback(data):
 	if not reachedLocation:
 		rospy.loginfo("Did not reach WayPoint x: %f y: %f", x, y)
 		return 1 #fail
+	else:
+		return 3 #continue
 
 if __name__ == "__main__":
 	rospy.init_node("testit_tb_tutorial")
 	rate = rospy.Rate(2)
+	counter = 10
+	if len(sys.argv) == 2:
+		counter = int(sys.argv[1])
+	counter = int(sys.argv[1])
 	while not rospy.is_shutdown():
 		msg = rospy.wait_for_message("/move_base/current_goal", PoseStamped)
 		result = goalCallback(msg)
-		if result == 0:
-			sys.exit(0)
+		if result == 3:
+			counter -= 1
+			if counter <= 0:
+				sys.exit(0) #success
 		elif result == 1:
-			sys.exit(1)
+			sys.exit(1) #fail
 		rate.sleep()
