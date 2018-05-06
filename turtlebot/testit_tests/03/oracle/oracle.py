@@ -51,7 +51,7 @@ def goalCallback(data):
 	if reachedLocation and goalId == reachedTargetId:
 		rospy.loginfo("%s reached successfully", target)
 		return 0
-	elif not reachedLocation and goalId == reachedTargetId:
+	elif not reachedLocation:
 		rospy.loginfo("Did not reach %s", target)
 		return 1
 	else:
@@ -69,7 +69,7 @@ if __name__ == "__main__":
 			result = goalCallback(msg)
 			rospy.loginfo("GOT RETURN STATEMENT %d", result)
 			if result == 0:
-				sys.exit(0)
+				sys.exit(0) #success
 			elif result == 1:
-				sys.exit(1)
+				sys.exit(1) #fail
 		rate.sleep()

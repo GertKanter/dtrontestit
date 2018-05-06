@@ -43,7 +43,7 @@ from geometry_msgs.msg import PoseStamped
 def resultCallback(data):
 	goalStatus = data.status.text
 	rospy.loginfo(goalStatus)
-	if goalStatus != "Goal reached.":
+	if goalStatus == "Failed to find a valid plan. Even after executing recovery behaviors.":
 		return False
 	else:
 		return True
@@ -66,7 +66,6 @@ if __name__ == "__main__":
 	counter = 10
 	if len(sys.argv) == 2:
 		counter = int(sys.argv[1])
-	counter = int(sys.argv[1])
 	while not rospy.is_shutdown():
 		msg = rospy.wait_for_message("/move_base/current_goal", PoseStamped)
 		result = goalCallback(msg)
