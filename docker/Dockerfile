@@ -1,6 +1,6 @@
 # VERSION 0.0.1
 FROM ubuntu:xenial
-MAINTAINER Gert Kanter <gert.kanter@ttu.ee>
+MAINTAINER Artur Gummel <artur.gummel@ttu.ee>
 LABEL Description="TestIt! ROS Testing toolkit base docker image"
 RUN apt-get update && \
 #install wget, vim, git, autoconf and scons

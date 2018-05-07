@@ -1,5 +1,5 @@
 FROM testit:latest
-MAINTAINER Gert Kanter <gert.kanter@ttu.ee>
+MAINTAINER Artur Gummel <artur.gummel@ttu.ee>
 LABEL Description="TestIt! ROS Testing toolkit docker image"
 ARG DEBIAN_FRONTEND=noninteractive
 
