@@ -41,3 +41,18 @@ And finally, to start the test type:<br/>
 It is possible to monitor what happens in containers by passing the container identifier to the parameter:
 
 `$ docker attach CONTAINER-ID`
+
+Executing the Stage example
+-----------
+Navigate to the “catkin_ws” directory and source files:<br/>
+`$ cd /catkin_ws`<br/>
+`$ source devel/setup.bash`
+
+To start TestIt daemon, type next command:<br/>
+`$ roslaunch dtron turtlebot.launch config:=/catkin_ws/src/testit/dtron/turtlebot/cfg/config_stage.yaml`<br/>
+
+To set the state and to bring up open new terminal and type:<br/>
+`$ rosrun testit testit_command.py bringup`
+
+And finally, to start the test type:<br/>
+`$ rosrun testit testit_command.py test`
