@@ -150,7 +150,7 @@ add_library(xtaproto_lib
 #add_executable(talker src/talker.cpp)
 #add_executable(listener src/listener.cpp)
 add_executable(test_adapter src/test_adapter.cpp)
-
+add_executable(stage_adapter src/stage_adapter.cpp)
 #add_executable(myspread_adapter src/myspread.cpp)
 
 ## Rename C++ executable without prefix
@@ -187,7 +187,13 @@ target_link_libraries(test_adapter
    xtaproto_lib
    pthread
  )
-
+target_link_libraries(stage_adapter
+   ${catkin_LIBRARIES}
+   ${spread_REALPATH}
+   ${protobuf_REALPATH}
+   xtaproto_lib
+   pthread
+ )
 
 ## Install ##
 #############

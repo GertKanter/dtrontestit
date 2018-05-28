@@ -6,6 +6,7 @@ RUN apt-get update && \
 	/bin/bash -c "echo \"deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main\" > /etc/apt/sources.list.d/gazebo-stable.list" && \
 	wget http://packages.osrfoundation.org/gazebo.key -O - | apt-key add - && \
 	apt-get update && \
+	apt-get install -y ros-kinetic-stage-ros && \
 	apt-get upgrade -y && \
 	mkdir -p /catkin_ws/src && \
 	/bin/bash -c "source /opt/ros/kinetic/setup.bash && cd /catkin_ws/src && catkin_init_workspace" && \
@@ -13,6 +14,7 @@ RUN apt-get update && \
 	git clone https://github.com/mission-control-ros/mission_control && \
 	git clone https://github.com/ros/executive_smach.git && \
 	git clone https://github.com/ros-perception/slam_gmapping.git && \
+	git clone https://github.com/arturgummel/robots_stage.git && \
 	cd slam_gmapping && \
 	git fetch origin pull/56/head:nodelet_fix && \
 	git checkout nodelet_fix && \
