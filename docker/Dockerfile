@@ -38,6 +38,9 @@ RUN apt-get update && \
 	cd /catkin_ws/src && \
 	git clone https://github.com/strands-project/strands_navigation.git && \
 	git clone https://github.com/strands-project/mongodb_store.git && \
+	cd /catkin_ws/src/mongodb_store && \
+	git checkout 09d587f53dc2c5ebe5865d9ec98af447fd91fbe4 && \
+	cd /catkin_ws/src && \
 	git clone https://github.com/strands-project/strands_apps.git && \
 	git clone https://github.com/strands-project/strands_movebase && \
 	git clone https://github.com/strands-project/fremen.git && \
